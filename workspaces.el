@@ -38,6 +38,7 @@ If ws-fullscreen is t, loads the stored workspace under ws-workspaces and sets w
       (progn (set-window-configuration (ws-get-from-workspaces ws-current-workspace))
              (setq ws-fullscreen nil)
              (ws-save))
+    (ws-save)
     (setq ws-fullscreen t)
     (delete-other-windows)
     (ws-save))
