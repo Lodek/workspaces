@@ -1,0 +1,29 @@
+* About
+Workspaces.el introduces a concept similar to that of i3 window manager (https://i3wm.org/docs/userguide.html#_using_workspaces).
+
+Emacs register can simulate that functionality quite well. Problem is - they are a nuisance for frequent usage. Another drawback to that approach is taking up valuable registers with window configurations, TLDR - There must be a better way (https://youtu.be/wf-BqAjZb8M?t=1404). This is my attempt at a better way.
+
+Each workspace is bound to a character (similar to emacs registers), it can be any character (I happen to prefer homerow characters as opposed to numbers). Change workspaces with the 'ws-switch' function (check usage section). Once a workspace is selected, the window configuration is particular to that workspace. If a workspace hasn't been visited this session yet, creates it (by default - a single window pointing to scratch buffer).
+
+One other feature is the option to toggle one of the windows to full screen (essentially kill other windows) and be able to restore to the previous configuration. Fullscreen toggling happens per workspace meaning there can be more than one workspace in fullscreen'd while still preserving the old window configuration.
+
+Note - This package only introduces the concept of workspaces. That means it introduces a way to seeminglessly manage multiple window configurations. It does not, however, introduces tools to manage session and to reorganize a given configuration. Lots of capable packages exist for those purposes.
+
+* Functions and Usage
+Usage is pretty straight forward. There are only two functions that the end user needs to worry about.
+
+- ws-switch: Prompts user for a character (workspace name), stores current workspace and makes the switch.
+- ws-toggle-fullscreen: Makes the selected window in the current workspace the ony window and stores previous window configuration. Activate function again to cycle between single window and multiple windows.
+
+* Example config.
+Minimal configuration involves bidding ws-switch and ws-toggle-fullscreen.
+
+(global-set-key (kbd "M-j") 'ws-switch)
+(global-set-key (kbd "M-J") 'ws-toggle-fullscreen)
+
+Additionally, one may change the startup workspace as well as the default windowconf. Those can be done by editing the lisp code fairly easily.
+
+* Implementation
+Under the hood, workspaces uses a simple data strcuture. There are two hash tables. One for the fullscreen workspaces and other for workspaces.
+
+Each workspace created adds an entry to the hashtables where the key is the workspace character. If a workspace is not fullscreen its value on the fullscreen-workspaces hash table is nil and the configurations stored in nw-workspaces is used instead. 
